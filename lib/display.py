@@ -97,7 +97,7 @@ def bestow_treasures(data, prev_start):
     """Randomly decide whether or not to give the user a treasure."""
     if not prev_start:
         return
-    not_given = [cat for cat in data["cats"].itervalues() if cat["total_time_in_yard"] > 0 and not cat["given_treasure"]]
+    not_given = [cat for cat in data["cats"].values() if cat["total_time_in_yard"] > 0 and not cat["given_treasure"]]
     if len(not_given) is 0:
         return
     since_last_run = data["start"] - prev_start
@@ -109,6 +109,8 @@ def bestow_treasures(data, prev_start):
     prob = base + (base*bonus)
     rnd = random.random() # may the RNG bless you
     if rnd >= prob:
+        return
+    if not not_given:
         return
     giver = random.choice(not_given)
     data["cats"][giver["name"]]["given_treasure"] = True
@@ -127,8 +129,8 @@ def recieve_treasures(data):
 def check_treasures(data):
     temp = "{.TREASURE}[TREASURE]{.ENDC}".format(
             printer.PColors, printer.PColors)
-    treasures = [cat for cat in data["cats"].itervalues() if cat["given_treasure"]]
     if treasures:
+        treasures = [cat for cat in data["cats"].values() if cat["given_treasure"]]
         for cat in treasures:
             printer.p(temp, "You have a treasure from {0}! {1}!!!".format(
                     cat["name"], cat["treasure"]))

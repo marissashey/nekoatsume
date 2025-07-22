@@ -6,7 +6,7 @@ These functions are responsible for the game state updates.
 
 import time
 import random
-from query import cats_in_yard, cats_not_in_yard
+from lib.query import cats_in_yard, cats_not_in_yard
 
 def update(data):
     """Update game data."""
@@ -56,6 +56,8 @@ def pick_toy(data, cat):
             return fav_toy[0]
         else:
             return None
+    if not yard_toys:
+        return
     return random.choice(yard_toys)
 
 def is_open(toy):
